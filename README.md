@@ -19,3 +19,6 @@ In hindsight that might not have been that hard. All object in openframeworks in
 and it's really easy to transform/parent object. Other than that I just threw a light in and we have a demo type thing. 
 
 
+## Addons
+ofxAssimpModelLoader
+ofxLeapC
