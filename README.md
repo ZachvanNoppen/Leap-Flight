@@ -13,7 +13,7 @@ Right now none of it interpolates since I figured that may be a pain to debug wi
 
 ## UP/DOWN for camera movement
 
-
+## F for flapping (Hold)
 
 # How it all works
 
