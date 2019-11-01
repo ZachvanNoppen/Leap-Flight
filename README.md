@@ -4,7 +4,7 @@
 # Leap-Flight
 
 ## TODO
-- So far I just have to get the wing flapping working. I know how to do it, but it might take some adjusting so here's the version without it so you guys can get started on it.
+- ~~So far I just have to get the wing flapping working. I know how to do it, but it might take some adjusting so here's the version without it so you guys can get started on it.~~
 - There is no range on where the bird can fly but you guys can add that when you do the sensor out of bounds test (like in class)
 
 # Controls
