@@ -31,11 +31,16 @@ class ofApp : public ofBaseApp{
 		ofVec3f m_horizonPosition;
 		ofVec3f m_birdPosition;
 		ofNode m_birdNode;
+		ofNode m_birdWingPosition[2];
 		float m_wingAngle;
+		float m_wingDirection = 1.0;
 		
 		vector<ofxAssimpModelLoader> m_clouds;
 		float m_heightModifier;
 
 		std::chrono::steady_clock::time_point m_timer;
 		std::chrono::steady_clock::time_point m_flapTimer;
+
+		//enumerators are given default values from 1 to n so RIGHT is 0, LEFT is 1
+		enum Wings {RIGHT, LEFT};
 };

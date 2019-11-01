@@ -33,6 +33,7 @@ void ofApp::update(){
 	//dividing the camera tilt to stop the cam from rotating.
 	m_cameraTilt /= 1.2f;
 	m_cam.tiltDeg(m_cameraTilt);
+	//m_wingAngle /= 1.009;
 
 	//Creating new clouds and removing ones that are out of the frame
 	generateClouds();
@@ -47,6 +48,14 @@ void ofApp::update(){
 	}
 	m_birdNode.setPosition(m_birdPosition);
 	//flapWings();
+	m_birdWingPosition[RIGHT].setPosition(m_birdPosition.x + 3.0f, m_birdPosition.y, m_birdPosition.z);
+	m_birdWingPosition[LEFT].setPosition(m_birdPosition.x - 3.0f, m_birdPosition.y, m_birdPosition.z);
+	ofQuaternion orientation = m_birdNode.getGlobalOrientation();
+
+	m_birdWingPosition[RIGHT].setGlobalOrientation(orientation);
+	m_birdWingPosition[LEFT].setGlobalOrientation(orientation);
+
+	//flapWings();
 }
 
 //--------------------------------------------------------------
@@ -58,31 +67,34 @@ void ofApp::draw(){
 
 	//Drawing the bird
 	//ofBoxPrimative as a placeholder for bird
-	ofVec3f cords = m_birdNode.getGlobalPosition();
-	ofQuaternion orientation = m_birdNode.getGlobalOrientation();
 	ofBoxPrimitive birdBody(1, 1, 10);
+	//Creating boxes with a defined size
 	ofBoxPrimitive birdWings[2];
-	birdWings[0].set(5.0f, 0.5f, 4.0f);
-	birdWings[1].set(5.0f, 0.5f, 4.0f);
+	birdWings[RIGHT].set(5.0f, 0.5f, 4.0f);
+	birdWings[LEFT].set(5.0f, 0.5f, 4.0f);
 
 	
 	ofSetColor(0, 0, 255);
 	//Setting the position and orentation
-	birdBody.setPosition(cords);
-	birdBody.setGlobalOrientation(orientation);
+	birdBody.setPosition(m_birdPosition);
+	birdBody.setGlobalOrientation(m_birdNode.getGlobalOrientation());
 	
 	//Setting position and orientation
-	birdWings[0].setPosition(cords.x + 3.0f,cords.y,cords.z);
-	birdWings[0].setGlobalOrientation(orientation);
-	birdWings[1].setPosition(cords.x - 3.0f, cords.y, cords.z);
-	birdWings[1].setGlobalOrientation(orientation);
+	birdWings[RIGHT].setPosition(m_birdWingPosition[0].getGlobalPosition());
+	birdWings[RIGHT].setGlobalOrientation(m_birdWingPosition[0].getGlobalOrientation());
+	birdWings[RIGHT].rollDeg(m_wingAngle);
+	birdWings[LEFT].setPosition(m_birdWingPosition[1].getGlobalPosition());
+	birdWings[LEFT].setGlobalOrientation(m_birdWingPosition[1].getGlobalOrientation());
+	birdWings[LEFT].rollDeg(-m_wingAngle);
 	//Rolling is used to flap the wings
-	//birdWings[0].rollDeg(m_wingAngle);
-	//birdWings[1].rollDeg(m_wingAngle);
+	ofVec3f axis;
+	axis.set(0.0f, 0.0f, 1.0f); 
+	birdWings[RIGHT].rotateAroundDeg(m_wingAngle, axis, m_birdPosition);
+	birdWings[LEFT].rotateAroundDeg(-m_wingAngle, axis, m_birdPosition);
 	
 	
-	birdWings[0].draw();
-	birdWings[1].draw();
+	birdWings[RIGHT].draw();
+	birdWings[LEFT].draw();
 	birdBody.draw();
 
 	//Drawing the horizon line 
@@ -106,15 +118,17 @@ void ofApp::flapWings() {
 	//BELOW only works around it's own Z axis
 	//The solution is to make a new node next to the bird, make the wing it's child and then rotate the wing around the parent node
 
-	/*if (std::chrono::steady_clock::now() > m_flapTimer) {
-		float direction = 1.0;
+
+	//if (std::chrono::steady_clock::now() > m_flapTimer) {
+		
 		if (m_wingAngle > 45.0f || m_wingAngle < -30.0f) {
-			direction *= -1.0f;
+			m_wingDirection *= -1.0f;
 		}
 
-		m_wingAngle += ofLerpDegrees(m_wingAngle, direction*5.0f, 0.05f);
-		m_flapTimer = std::chrono::steady_clock::now() + std::chrono::seconds(1);
-	}*/
+		m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
+		
+		//m_flapTimer = std::chrono::steady_clock::now() + std::chrono::seconds(1);
+	//}
 	
 	
 }
@@ -194,6 +208,9 @@ void ofApp::keyPressed(int key){
 	}
 	if (key == 'd') {
 		m_birdPosition.x += 5.0f;
+	}
+	if(key == 'f'){
+		flapWings();
 	}
 
 }
