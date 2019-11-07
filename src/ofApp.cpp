@@ -65,10 +65,6 @@ void ofApp::update(){
 	m_birdWingPosition[LEFT].setGlobalOrientation(orientation);
 
 	//flapWings();
-<<<<<<< HEAD
-
-=======
->>>>>>> 8471223f3cebbc6f6a8bdcc28d7e6431d70546dc
 }
 
 //--------------------------------------------------------------
@@ -89,20 +85,6 @@ void ofApp::draw(){
 
 	ofSetColor(0, 0, 255);
 	//Setting the position and orentation
-<<<<<<< HEAD
-
-=======
->>>>>>> 8471223f3cebbc6f6a8bdcc28d7e6431d70546dc
-	birdBody.setPosition(m_birdPosition);
-	birdBody.setGlobalOrientation(m_birdNode.getGlobalOrientation());
-
-	//Setting position and orientation
-	birdWings[RIGHT].setPosition(m_birdWingPosition[0].getGlobalPosition());
-	birdWings[RIGHT].setGlobalOrientation(m_birdWingPosition[0].getGlobalOrientation());
-<<<<<<< HEAD
-=======
-
->>>>>>> 8471223f3cebbc6f6a8bdcc28d7e6431d70546dc
 	birdWings[RIGHT].rollDeg(controls.m_wingAngle2);
 	birdWings[LEFT].setPosition(m_birdWingPosition[1].getGlobalPosition());
 	birdWings[LEFT].setGlobalOrientation(m_birdWingPosition[1].getGlobalOrientation());
@@ -112,11 +94,7 @@ void ofApp::draw(){
 	axis.set(0.0f, 0.0f, 1.0f);
 	birdWings[RIGHT].rotateAroundDeg(controls.m_wingAngle2, axis, m_birdPosition);
 	birdWings[LEFT].rotateAroundDeg(-controls.m_wingAngle1, axis, m_birdPosition);
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> 8471223f3cebbc6f6a8bdcc28d7e6431d70546dc
 	birdWings[RIGHT].draw();
 	birdWings[LEFT].draw();
 	birdBody.draw();
@@ -153,11 +131,6 @@ void ofApp::flapWings() {
 		//m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
 
 		//m_wingAngle = m_wingDirection;
-<<<<<<< HEAD
-
-=======
-		
->>>>>>> 8471223f3cebbc6f6a8bdcc28d7e6431d70546dc
 		//m_flapTimer = std::chrono::steady_clock::now() + std::chrono::seconds(1);
 	//}
 
