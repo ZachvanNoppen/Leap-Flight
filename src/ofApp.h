@@ -46,5 +46,4 @@ class ofApp : public ofBaseApp{
 		enum Wings {RIGHT, LEFT};
 
 		leapControls controls;
-
 };

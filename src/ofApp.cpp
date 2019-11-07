@@ -65,7 +65,6 @@ void ofApp::update(){
 	m_birdWingPosition[LEFT].setGlobalOrientation(orientation);
 
 	//flapWings();
-
 }
 
 //--------------------------------------------------------------
@@ -86,13 +85,13 @@ void ofApp::draw(){
 	
 	ofSetColor(0, 0, 255);
 	//Setting the position and orentation
-
 	birdBody.setPosition(m_birdPosition);
 	birdBody.setGlobalOrientation(m_birdNode.getGlobalOrientation());
 	
 	//Setting position and orientation
 	birdWings[RIGHT].setPosition(m_birdWingPosition[0].getGlobalPosition());
 	birdWings[RIGHT].setGlobalOrientation(m_birdWingPosition[0].getGlobalOrientation());
+
 	birdWings[RIGHT].rollDeg(controls.m_wingAngle2);
 	birdWings[LEFT].setPosition(m_birdWingPosition[1].getGlobalPosition());
 	birdWings[LEFT].setGlobalOrientation(m_birdWingPosition[1].getGlobalOrientation());
