@@ -1,5 +1,5 @@
 # I made you guys branches
-## Just push to your own branch, I'll merge everything when we are done.
+### Just push to your own branch, I'll merge everything when we are done.
 
 # Leap-Flight
 
@@ -8,14 +8,14 @@
 - ~~There is no range on where the bird can fly but you guys can add that when you do the sensor out of bounds test (like in class)~~
 
 # Controls
-If using a Leap Motion, take a look at the Yaseen's branch. It has the hand control code.
+Check out the demo video
 
-### WASD for moving the bird on screen
+### (OLD) WASD for moving the bird on screen
 Right now none of it interpolates since I figured that may be a pain to debug with. It messed me up when doing the camera at the start so we can add it later
 
-### UP/DOWN for camera movement
+### (OLD) UP/DOWN for camera movement
 
-### F for flapping (Hold)
+### (OLD) F for flapping (Hold)
 
 # How it all works
 
@@ -27,3 +27,5 @@ and it's really easy to transform/parent object. Other than that I just threw a 
 ## Addons
 ofxAssimpModelLoader
 ofxLeapC
+
+also include the controller header included in src
