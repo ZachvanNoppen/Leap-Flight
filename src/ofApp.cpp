@@ -19,13 +19,15 @@ void ofApp::setup(){
 	m_cameraTilt = 0;
 	m_timer = std::chrono::steady_clock::now()
 		+ std::chrono::seconds(5);
-	//m_flapTimer = std::chrono::steady_clock::now() 
+	//m_flapTimer = std::chrono::steady_clock::now()
 	  //+ std::chrono::seconds(1);
 
 	m_heightModifier = 0;
 	//Parenting camera to bird so all transformations are kept
 	m_birdNode.setPosition(m_birdPosition);
 	m_birdNode.setParent(m_cam);
+
+	controls.setup();
 }
 
 //--------------------------------------------------------------
@@ -46,7 +48,14 @@ void ofApp::update(){
 		//Note that they are moving up and down depending on the camera angle
 		m_clouds[inc].setPosition(currentPos.x, currentPos.y + m_heightModifier, currentPos.z + SPEED_INC);
 	}
+
+	controls.update();
+
+	m_birdPosition.x = controls.m_birdPos.x;
+	m_birdPosition.y = controls.m_birdPos.y;
+
 	m_birdNode.setPosition(m_birdPosition);
+
 	//flapWings();
 	m_birdWingPosition[RIGHT].setPosition(m_birdPosition.x + 3.0f, m_birdPosition.y, m_birdPosition.z);
 	m_birdWingPosition[LEFT].setPosition(m_birdPosition.x - 3.0f, m_birdPosition.y, m_birdPosition.z);
@@ -56,6 +65,7 @@ void ofApp::update(){
 	m_birdWingPosition[LEFT].setGlobalOrientation(orientation);
 
 	//flapWings();
+
 }
 
 //--------------------------------------------------------------
@@ -73,31 +83,32 @@ void ofApp::draw(){
 	birdWings[RIGHT].set(5.0f, 0.5f, 4.0f);
 	birdWings[LEFT].set(5.0f, 0.5f, 4.0f);
 
-	
+
 	ofSetColor(0, 0, 255);
 	//Setting the position and orentation
+
 	birdBody.setPosition(m_birdPosition);
 	birdBody.setGlobalOrientation(m_birdNode.getGlobalOrientation());
-	
+
 	//Setting position and orientation
 	birdWings[RIGHT].setPosition(m_birdWingPosition[0].getGlobalPosition());
 	birdWings[RIGHT].setGlobalOrientation(m_birdWingPosition[0].getGlobalOrientation());
-	birdWings[RIGHT].rollDeg(m_wingAngle);
+	birdWings[RIGHT].rollDeg(controls.m_wingAngle2);
 	birdWings[LEFT].setPosition(m_birdWingPosition[1].getGlobalPosition());
 	birdWings[LEFT].setGlobalOrientation(m_birdWingPosition[1].getGlobalOrientation());
-	birdWings[LEFT].rollDeg(-m_wingAngle);
+	birdWings[LEFT].rollDeg(-controls.m_wingAngle1);
 	//Rolling is used to flap the wings
 	ofVec3f axis;
-	axis.set(0.0f, 0.0f, 1.0f); 
-	birdWings[RIGHT].rotateAroundDeg(m_wingAngle, axis, m_birdPosition);
-	birdWings[LEFT].rotateAroundDeg(-m_wingAngle, axis, m_birdPosition);
-	
-	
+	axis.set(0.0f, 0.0f, 1.0f);
+	birdWings[RIGHT].rotateAroundDeg(controls.m_wingAngle2, axis, m_birdPosition);
+	birdWings[LEFT].rotateAroundDeg(-controls.m_wingAngle1, axis, m_birdPosition);
+
 	birdWings[RIGHT].draw();
 	birdWings[LEFT].draw();
 	birdBody.draw();
 
-	//Drawing the horizon line 
+
+	//Drawing the horizon line
 	ofSetColor(0, 0, 0);
 	ofFill();
 	ofDrawBox(m_horizonPosition, 6000, 10, 10);
@@ -120,20 +131,22 @@ void ofApp::flapWings() {
 
 
 	//if (std::chrono::steady_clock::now() > m_flapTimer) {
-		
+
 		if (m_wingAngle > 45.0f || m_wingAngle < -30.0f) {
 			m_wingDirection *= -1.0f;
 		}
 
-		m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
-		
+		//m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
+
+		//m_wingAngle = m_wingDirection;
+
 		//m_flapTimer = std::chrono::steady_clock::now() + std::chrono::seconds(1);
 	//}
-	
-	
+
+
 }
 void ofApp::tiltCamera(int keyPressed) {
-	//Orientation of the coordinate plane looks like: 
+	//Orientation of the coordinate plane looks like:
 	//
 	/// +deg    	+deg
 	// 0 --------cam--------- 180
@@ -157,8 +170,8 @@ void ofApp::tiltCamera(int keyPressed) {
 				m_heightModifier -= HEIGHT_MOD_TARGET;
 			}
 		}
-		
-		
+
+
 
 	}
 	else if (keyPressed == OF_KEY_DOWN) {
@@ -169,20 +182,20 @@ void ofApp::tiltCamera(int keyPressed) {
 		}else {
 			//Interpolating between tilting values to make the movement smooth
 			m_cameraTilt = ofLerpDegrees(m_cameraTilt, -TILT_TARGET, 0.5f);
-			//Adjusting clounds up 
+			//Adjusting clounds up
 			if (orientation.x < 5.0f && orientation.x > -5.0) {
 				m_heightModifier = 0.0f;
 			}
 			else {
 				m_heightModifier += HEIGHT_MOD_TARGET;
 			}
-			
+
 		}
-		
+
 
 	}
 
-	
+
 }
 
 //--------------------------------------------------------------
@@ -190,7 +203,7 @@ void ofApp::keyPressed(int key){
 
 	if (key == OF_KEY_UP) {
 		tiltCamera(key);
-	} 
+	}
 	if (key == OF_KEY_DOWN) {
 		tiltCamera(key);
 	}
@@ -217,7 +230,7 @@ void ofApp::keyPressed(int key){
 
 void ofApp::generateClouds() {
 	//Randomly Keep generating objects that move around the screen.
-	
+
 	if (std::chrono::steady_clock::now() > m_timer)
 	{
 
@@ -229,14 +242,14 @@ void ofApp::generateClouds() {
 
 		m_timer = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 
-		
+
 		ofxAssimpModelLoader cloudModel;
 		cloudModel.loadModel("low_poly_cloud_v1.stl");
 		cloudModel.setRotation(0, 180, 1, 0, 0);
 		cloudModel.setPosition(randomPosition.x,randomPosition.y, randomPosition.z);
 		m_clouds.push_back(cloudModel);
 	}
-	
+
 }
 
 void ofApp::deleteClouds() {
@@ -254,7 +267,7 @@ void ofApp::deleteClouds() {
 			break;
 		}
 
-		//Checking if at the end of the list 
+		//Checking if at the end of the list
 		if (checkIterator != m_clouds.size()) {
 			//Incrementing both iterators
 			advance(it, 1);

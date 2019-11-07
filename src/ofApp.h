@@ -2,11 +2,12 @@
 
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
+#include "leapControls.h"
 
 class ofApp : public ofBaseApp{
 
 	public:
-		
+
 		void setup();
 		void update();
 		void draw();
@@ -34,7 +35,7 @@ class ofApp : public ofBaseApp{
 		ofNode m_birdWingPosition[2];
 		float m_wingAngle;
 		float m_wingDirection = 1.0;
-		
+
 		vector<ofxAssimpModelLoader> m_clouds;
 		float m_heightModifier;
 
@@ -43,4 +44,6 @@ class ofApp : public ofBaseApp{
 
 		//enumerators are given default values from 1 to n so RIGHT is 0, LEFT is 1
 		enum Wings {RIGHT, LEFT};
+
+		controls.setup();
 };
