@@ -45,5 +45,5 @@ class ofApp : public ofBaseApp{
 		//enumerators are given default values from 1 to n so RIGHT is 0, LEFT is 1
 		enum Wings {RIGHT, LEFT};
 
-		controls.setup();
+		leapControls controls;
 };
