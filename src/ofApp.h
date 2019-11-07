@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
+#include "leapControls.h"
 
 class ofApp : public ofBaseApp{
 
@@ -43,4 +44,6 @@ class ofApp : public ofBaseApp{
 
 		//enumerators are given default values from 1 to n so RIGHT is 0, LEFT is 1
 		enum Wings {RIGHT, LEFT};
+
+		leapControls controls;
 };

@@ -14,7 +14,7 @@ void ofApp::setup(){
 	m_horizonPosition.set(0,-2400,-6000);
 	m_cam.setPosition(0, 0, 0);
 	m_birdPosition.set(0,-10,-30);
-
+	
 
 	m_cameraTilt = 0;
 	m_timer = std::chrono::steady_clock::now()
@@ -26,6 +26,8 @@ void ofApp::setup(){
 	//Parenting camera to bird so all transformations are kept
 	m_birdNode.setPosition(m_birdPosition);
 	m_birdNode.setParent(m_cam);
+
+	controls.setup();
 }
 
 //--------------------------------------------------------------
@@ -38,7 +40,7 @@ void ofApp::update(){
 	//Creating new clouds and removing ones that are out of the frame
 	generateClouds();
 	deleteClouds();
-
+	
 	//Moving all of the coulds
 	for (int inc = 0; inc < m_clouds.size(); inc++) {
 		ofVec3f currentPos = m_clouds[inc].getPosition();
@@ -46,7 +48,14 @@ void ofApp::update(){
 		//Note that they are moving up and down depending on the camera angle
 		m_clouds[inc].setPosition(currentPos.x, currentPos.y + m_heightModifier, currentPos.z + SPEED_INC);
 	}
+
+	controls.update();
+
+	m_birdPosition.x = controls.m_birdPos.x;
+	m_birdPosition.y = controls.m_birdPos.y;
+
 	m_birdNode.setPosition(m_birdPosition);
+
 	//flapWings();
 	m_birdWingPosition[RIGHT].setPosition(m_birdPosition.x + 3.0f, m_birdPosition.y, m_birdPosition.z);
 	m_birdWingPosition[LEFT].setPosition(m_birdPosition.x - 3.0f, m_birdPosition.y, m_birdPosition.z);
@@ -82,20 +91,21 @@ void ofApp::draw(){
 	//Setting position and orientation
 	birdWings[RIGHT].setPosition(m_birdWingPosition[0].getGlobalPosition());
 	birdWings[RIGHT].setGlobalOrientation(m_birdWingPosition[0].getGlobalOrientation());
-	birdWings[RIGHT].rollDeg(m_wingAngle);
+
+	birdWings[RIGHT].rollDeg(controls.m_wingAngle2);
 	birdWings[LEFT].setPosition(m_birdWingPosition[1].getGlobalPosition());
 	birdWings[LEFT].setGlobalOrientation(m_birdWingPosition[1].getGlobalOrientation());
-	birdWings[LEFT].rollDeg(-m_wingAngle);
+	birdWings[LEFT].rollDeg(-controls.m_wingAngle1);
 	//Rolling is used to flap the wings
 	ofVec3f axis;
 	axis.set(0.0f, 0.0f, 1.0f); 
-	birdWings[RIGHT].rotateAroundDeg(m_wingAngle, axis, m_birdPosition);
-	birdWings[LEFT].rotateAroundDeg(-m_wingAngle, axis, m_birdPosition);
-	
+	birdWings[RIGHT].rotateAroundDeg(controls.m_wingAngle2, axis, m_birdPosition);
+	birdWings[LEFT].rotateAroundDeg(-controls.m_wingAngle1, axis, m_birdPosition);
 	
 	birdWings[RIGHT].draw();
 	birdWings[LEFT].draw();
 	birdBody.draw();
+
 
 	//Drawing the horizon line 
 	ofSetColor(0, 0, 0);
@@ -125,7 +135,9 @@ void ofApp::flapWings() {
 			m_wingDirection *= -1.0f;
 		}
 
-		m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
+		//m_wingAngle = ofLerpDegrees(m_wingAngle, 60.0f*m_wingDirection, 0.05f);
+		
+		//m_wingAngle = m_wingDirection;
 		
 		//m_flapTimer = std::chrono::steady_clock::now() + std::chrono::seconds(1);
 	//}
